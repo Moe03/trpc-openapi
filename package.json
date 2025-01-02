@@ -2,7 +2,7 @@
   "name": "trpc-openapi",
   "version": "1.2.0",
   "description": "tRPC OpenAPI",
-  "author": "James Berry <jb@jamesbe.com>",
+  "author": "Moe Ayman <moeaymandev@gmail.com>",
   "private": false,
   "license": "MIT",
   "keywords": [
@@ -10,9 +10,9 @@
     "openapi",
     "swagger"
   ],
-  "homepage": "https://github.com/jlalmes/trpc-openapi",
-  "repository": "github:jlalmes/trpc-openapi",
-  "bugs": "https://github.com/jlalmes/trpc-openapi/issues",
+  "homepage": "https://github.com/Moe03/trpc-openapi",
+  "repository": "github:Moe03/trpc-openapi",
+  "bugs": "https://github.com/Moe03/trpc-openapi/issues",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "workspaces": [

@@ -6,3 +6,4 @@ packages:
   - examples/with-serverless
   - examples/with-fastify
   - examples/with-nuxtjs
+  - playground

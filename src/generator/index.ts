@@ -3,6 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 import { OpenApiRouter } from '../types';
 import { getOpenApiPathsObject } from './paths';
 import { errorResponseObject } from './schema';
+import { getOpenApiComponentsObject } from './components';
 
 export const openApiVersion = '3.0.3';
 
@@ -26,6 +27,10 @@ export const generateOpenApiDocument = (
       scheme: 'bearer',
     },
   };
+  const components = getOpenApiComponentsObject(appRouter, Object.keys(securitySchemes));
+  const paths = getOpenApiPathsObject(appRouter, Object.keys(securitySchemes));
+
+  // console.log(components);
   return {
     openapi: openApiVersion,
     info: {
@@ -38,11 +43,14 @@ export const generateOpenApiDocument = (
         url: opts.baseUrl,
       },
     ],
-    paths: getOpenApiPathsObject(appRouter, Object.keys(securitySchemes)),
+    paths,
     components: {
       securitySchemes,
       responses: {
         error: errorResponseObject,
+      },
+      schemas: {
+        ...components.schemas,
       },
     },
     tags: opts.tags?.map((tag) => ({ name: tag })),
