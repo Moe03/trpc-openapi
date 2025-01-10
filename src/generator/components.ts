@@ -53,17 +53,17 @@ export function getOpenApiComponentsObject(
   collectSchemas('', appRouter);
 
   // Define standard ErrorResponse schema and response
-  const errorResponseSchemaName = 'ErrorResponse';
-  schemas[errorResponseSchemaName] = errorResponseObject;
+  // const errorResponseSchemaName = 'ErrorResponse';
+  // schemas[errorResponseSchemaName] = errorResponseObject;
 
-  responses[errorResponseSchemaName] = {
-    description: 'Error response',
-    content: {
-      'application/json': {
-        schema: { $ref: `#/components/schemas/${errorResponseSchemaName}` },
-      },
-    },
-  };
+  // responses[errorResponseSchemaName] = {
+  //   description: 'Error response',
+  //   content: {
+  //     'application/json': {
+  //       schema: { $ref: `#/components/schemas/${errorResponseSchemaName}` },
+  //     },
+  //   },
+  // };
 
   return {
     schemas,

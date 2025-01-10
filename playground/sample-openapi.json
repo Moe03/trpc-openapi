@@ -897,39 +897,6 @@
       "posts.deletePostById.Output": {
         "enum": ["null"],
         "nullable": true
-      },
-      "ErrorResponse": {
-        "description": "Error response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "string"
-                },
-                "issues": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["message"],
-                    "additionalProperties": false
-                  }
-                }
-              },
-              "required": ["message", "code"],
-              "additionalProperties": false
-            }
-          }
-        }
       }
     }
   },
