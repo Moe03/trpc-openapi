@@ -1,0 +1,950 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Example CRUD API",
+    "description": "OpenAPI compliant REST API built using tRPC with Express",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:undefined/api"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "auth-register",
+        "summary": "Register as a new user",
+        "tags": ["auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "passcode": {
+                    "type": "number",
+                    "minimum": 1000,
+                    "maximum": 9999
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 3
+                  }
+                },
+                "required": ["email", "passcode", "name"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 3
+                        }
+                      },
+                      "required": ["id", "email", "name"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["user"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "auth-login",
+        "summary": "Login as an existing user",
+        "tags": ["auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "passcode": {
+                    "type": "number",
+                    "minimum": 1000,
+                    "maximum": 9999
+                  }
+                },
+                "required": ["email", "passcode"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["token"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "operationId": "users-getUsers",
+        "summary": "Read all users",
+        "tags": ["users"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["id", "email", "name"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["users"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "users-getUserById",
+        "summary": "Read a user by id",
+        "tags": ["users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["id", "email", "name"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["user"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "operationId": "posts-getPosts",
+        "summary": "Read all posts",
+        "tags": ["posts"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "posts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "format": "uuid"
+                          }
+                        },
+                        "required": ["id", "content", "userId"],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": ["posts"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      },
+      "post": {
+        "operationId": "posts-createPost",
+        "summary": "Create a new post",
+        "tags": ["posts"],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 140
+                  }
+                },
+                "required": ["content"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "The unique identifier of the post"
+                        },
+                        "content": {
+                          "type": "string",
+                          "description": "The content of the post"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "The unique identifier of the user who created the post"
+                        }
+                      },
+                      "required": ["id", "content", "userId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["post"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "get": {
+        "operationId": "posts-getPostById",
+        "summary": "Read a post by id",
+        "tags": ["posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "The unique identifier of the post"
+                        },
+                        "content": {
+                          "type": "string",
+                          "description": "The content of the post"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "The unique identifier of the user who created the post"
+                        }
+                      },
+                      "required": ["id", "content", "userId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["post"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      },
+      "put": {
+        "operationId": "posts-updatePostById",
+        "summary": "Update an existing post",
+        "tags": ["posts"],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["content"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "The unique identifier of the post"
+                        },
+                        "content": {
+                          "type": "string",
+                          "description": "The content of the post"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "format": "uuid",
+                          "description": "The unique identifier of the user who created the post"
+                        }
+                      },
+                      "required": ["id", "content", "userId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["post"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "posts-deletePostById",
+        "summary": "Delete a post",
+        "tags": ["posts"],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "enum": ["null"],
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["message"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["message", "code"],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "auth.register.[object Object]": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "passcode": {
+            "type": "number",
+            "minimum": 1000,
+            "maximum": 9999
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3
+          }
+        },
+        "required": ["email", "passcode", "name"],
+        "additionalProperties": false
+      },
+      "auth.register.Output": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 3
+              }
+            },
+            "required": ["id", "email", "name"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["user"],
+        "additionalProperties": false
+      },
+      "auth.login.[object Object]": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "passcode": {
+            "type": "number",
+            "minimum": 1000,
+            "maximum": 9999
+          }
+        },
+        "required": ["email", "passcode"],
+        "additionalProperties": false
+      },
+      "auth.login.Output": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": ["token"],
+        "additionalProperties": false
+      },
+      "users.getUsers.[object Object]": {},
+      "users.getUsers.Output": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": ["id", "email", "name"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["users"],
+        "additionalProperties": false
+      },
+      "users.getUserById.[object Object]": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["id"],
+        "additionalProperties": false
+      },
+      "users.getUserById.Output": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "email", "name"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["user"],
+        "additionalProperties": false
+      },
+      "posts.getPosts.[object Object]": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "posts.getPosts.Output": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "required": ["id", "content", "userId"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["posts"],
+        "additionalProperties": false
+      },
+      "posts.getPostById.[object Object]": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["id"],
+        "additionalProperties": false
+      },
+      "posts.getPostById.Output": {
+        "type": "object",
+        "properties": {
+          "post": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The unique identifier of the post"
+              },
+              "content": {
+                "type": "string",
+                "description": "The content of the post"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The unique identifier of the user who created the post"
+              }
+            },
+            "required": ["id", "content", "userId"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["post"],
+        "additionalProperties": false
+      },
+      "posts.createPost.[object Object]": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          }
+        },
+        "required": ["content"],
+        "additionalProperties": false
+      },
+      "posts.createPost.Output": {
+        "type": "object",
+        "properties": {
+          "post": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The unique identifier of the post"
+              },
+              "content": {
+                "type": "string",
+                "description": "The content of the post"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The unique identifier of the user who created the post"
+              }
+            },
+            "required": ["id", "content", "userId"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["post"],
+        "additionalProperties": false
+      },
+      "posts.updatePostById.[object Object]": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["id", "content"],
+        "additionalProperties": false
+      },
+      "posts.updatePostById.Output": {
+        "type": "object",
+        "properties": {
+          "post": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The unique identifier of the post"
+              },
+              "content": {
+                "type": "string",
+                "description": "The content of the post"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "description": "The unique identifier of the user who created the post"
+              }
+            },
+            "required": ["id", "content", "userId"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["post"],
+        "additionalProperties": false
+      },
+      "posts.deletePostById.[object Object]": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["id"],
+        "additionalProperties": false
+      },
+      "posts.deletePostById.Output": {
+        "enum": ["null"],
+        "nullable": true
+      },
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["message"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["message", "code"],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "auth"
+    },
+    {
+      "name": "users"
+    },
+    {
+      "name": "posts"
+    }
+  ],
+  "externalDocs": {
+    "url": "https://github.com/jlalmes/trpc-openapi"
+  }
+}
